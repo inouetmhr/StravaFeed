@@ -1,5 +1,7 @@
 require 'sinatra'
 
+require './strava-feed'
+
 get '/' do
-  self.to_s
+  StravaFeed.new.puts_daily_stats
 end
