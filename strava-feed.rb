@@ -38,7 +38,7 @@ class StravaFeed
     offset = Rational(9,24)
     stats = Hash.new(0.0)
 
-    output = "#date, km\r\n" # csv format header
+    output = "#date, km\n" # csv format header
     @activities.map{|act| 
       datetime = DateTime.iso8601(act["start_date"])
       date = (datetime + offset).to_date
@@ -50,7 +50,7 @@ class StravaFeed
     min, max = stats.keys.minmax
     (min..max).each{|date|
       #@fileout.puts "#{date}, #{stats[date]}" 
-      output += "#{date}, #{stats[date]}\r\n" 
+      output += "#{date}, #{stats[date]}\n" 
     }
     output
   end
