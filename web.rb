@@ -1,5 +1,5 @@
 require 'sinatra'
 
 get '/' do
-  self
+  self.to_s
 end
