@@ -38,7 +38,7 @@ class StravaFeed
     offset = Rational(9,24)
     stats = Hash.new(0.0)
 
-    output = "#date, km\n" # csv format header
+    output = "#date, km\r\n" # csv format header
     @activities.map{|act| 
       datetime = DateTime.iso8601(act["start_date"])
       date = (datetime + offset).to_date
@@ -50,15 +50,15 @@ class StravaFeed
     min, max = stats.keys.minmax
     (min..max).each{|date|
       #@fileout.puts "#{date}, #{stats[date]}" 
-      output += "#{date}, #{stats[date]}\n" 
+      output += "#{date}, #{stats[date]}\r\n" 
     }
     output
   end
   #puts_daily_stats
 end
 
-# Run only when TopLevel (not perfect but works...)
+# Run only when TopLevel (not working yet)
 if (self.to_s == "main") then
-  StravaFeed.new.daily_stats
+  print StravaFeed.new.daily_stats
 end
   
