@@ -51,6 +51,7 @@ class StravaFeed
       #@fileout.puts "#{date}, #{stats[date]}" 
       output += "#{date}, #{stats[date]}\n" 
     }
+    output
   end
   #puts_daily_stats
 end
