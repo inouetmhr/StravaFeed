@@ -5,7 +5,7 @@ require 'date'
 require 'strava/api/v3'
 
 class StravaFeed
-  def initialize(logger = nil)
+  def initialize(access_token = nil, logger = nil)
     if logger then
       @logger = logger
     else
@@ -13,16 +13,19 @@ class StravaFeed
       @logger.level = Logger::INFO
     end
     @fileout = STDOUT
-    @client = Strava::Api::V3::Client.new(:access_token => "f641bc0eac932eff658633e8dfc37d4b88efacb5", :logger => @logger)
+    access_token ||= ENV['strava_token']
+    @logger.info("access_token: #{access_token}")
+    @client = Strava::Api::V3::Client.new(:access_token => access_token, 
+                                          :logger => @logger)
   end
   
-  def get_activities
+  def get_activities(after=nil)
     @activities = @client.list_athlete_activities
     # http://strava.github.io/api/v3/activities/
   end
 
-  def puts_activities
-    get_activities
+  def puts_activities(after=nil)
+    get_activities(after)
     puts "#start_time, km" # csv format header
     @activities.map{|act| 
       date = DateTime.parse(act["start_date"]).new_offset(Rational(9,24))
@@ -33,8 +36,8 @@ class StravaFeed
   end
   #puts_activities
 
-  def daily_stats
-    get_activities
+  def daily_stats(after=nil)
+    get_activities(after)
     offset = Rational(9,24)
     stats = Hash.new(0.0)
 
@@ -59,6 +62,6 @@ end
 
 # Run only when TopLevel (not working yet)
 if (self.to_s == "main") then
-  print StravaFeed.new.daily_stats
+  puts StravaFeed.new.daily_stats
 end
   
