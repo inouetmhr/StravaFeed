@@ -68,6 +68,7 @@ end
 # Run only when TopLevel 
 if (self.to_s == "main") then
   #since = Time.parse("2015/3/01")
+  since = nil
   puts StravaFeed.new.daily_stats(since)
 end
   
