@@ -19,13 +19,18 @@ class StravaFeed
                                           :logger => @logger)
   end
   
-  def get_activities(after=nil)
-    @activities = @client.list_athlete_activities(:after => after)
+  def get_activities(since=nil)
     # http://strava.github.io/api/v3/activities/
+    if since 
+      arg = {:after => since.to_i}
+      @activities = @client.list_athlete_activities(arg)
+    else
+      @activities = @client.list_athlete_activities
+    end
   end
 
-  def puts_activities(after=nil)
-    get_activities(after)
+  def puts_activities(since=nil)
+    get_activities(since)
     puts "#start_time, km" # csv format header
     @activities.map{|act| 
       date = DateTime.parse(act["start_date"]).new_offset(Rational(9,24))
@@ -36,8 +41,8 @@ class StravaFeed
   end
   #puts_activities
 
-  def daily_stats(after=nil)
-    get_activities(after)
+  def daily_stats(since=nil)
+    get_activities(since)
     offset = Rational(9,24)
     stats = Hash.new(0.0)
 
@@ -62,7 +67,7 @@ end
 
 # Run only when TopLevel 
 if (self.to_s == "main") then
-  since = Time.now - 60*60*24 * 100 # today - 100 days 
+  #since = Time.parse("2015/3/01")
   puts StravaFeed.new.daily_stats(since)
 end
   
