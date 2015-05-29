@@ -20,7 +20,7 @@ class StravaFeed
   end
   
   def get_activities(after=nil)
-    @activities = @client.list_athlete_activities
+    @activities = @client.list_athlete_activities(:after => after)
     # http://strava.github.io/api/v3/activities/
   end
 
@@ -60,8 +60,9 @@ class StravaFeed
   #puts_daily_stats
 end
 
-# Run only when TopLevel (not working yet)
+# Run only when TopLevel 
 if (self.to_s == "main") then
-  puts StravaFeed.new.daily_stats
+  since = Time.now - 60*60*24 * 100 # today - 100 days 
+  puts StravaFeed.new.daily_stats(since)
 end
   
